@@ -1,0 +1,62 @@
+import random
+import string
+import tkinter as tk
+from tkinter import messagebox
+
+def generate_password():
+    length = int(length_entry.get())
+    num_letters = int(letters_entry.get())
+    num_numbers = int(numbers_entry.get())
+    num_special_chars = int(special_chars_entry.get())
+
+    if length < (num_letters + num_numbers + num_special_chars):
+        messagebox.showerror("Error", "Length of the password should be greater than or equal to the sum of requested characters.")
+        return
+
+    letters = ''.join(random.choices(string.ascii_letters, k=num_letters))
+    numbers = ''.join(random.choices(string.digits, k=num_numbers))
+    special_chars = ''.join(random.choices(string.punctuation, k=num_special_chars))
+
+    remaining_length = length - (num_letters + num_numbers + num_special_chars)
+    remaining_chars = ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=remaining_length))
+
+    password = letters + numbers + special_chars + remaining_chars
+    password = ''.join(random.sample(password, len(password)))  # Shuffle the characters
+
+    password_label.config(text="Generated Password: " + password)
+
+# Create the main window
+window = tk.Tk()
+window.title("Random Password Generator")
+
+# Create labels and entries for input
+length_label = tk.Label(window, text="Password Length:")
+length_label.grid(row=0, column=0, padx=10, pady=10)
+length_entry = tk.Entry(window)
+length_entry.grid(row=0, column=1)
+
+letters_label = tk.Label(window, text="Number of Letters:")
+letters_label.grid(row=1, column=0, padx=10, pady=10)
+letters_entry = tk.Entry(window)
+letters_entry.grid(row=1, column=1)
+
+numbers_label = tk.Label(window, text="Number of Numbers:")
+numbers_label.grid(row=2, column=0, padx=10, pady=10)
+numbers_entry = tk.Entry(window)
+numbers_entry.grid(row=2, column=1)
+
+special_chars_label = tk.Label(window, text="Number of Special Characters:")
+special_chars_label.grid(row=3, column=0, padx=10, pady=10)
+special_chars_entry = tk.Entry(window)
+special_chars_entry.grid(row=3, column=1)
+
+# Create a button to generate the password
+generate_button = tk.Button(window, text="Generate", command=generate_password)
+generate_button.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+
+# Create a label to display the generated password
+password_label = tk.Label(window, text="Generated Password:", font=("Arial", 12))
+password_label.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
+
+# Run the main loop
+window.mainloop()
